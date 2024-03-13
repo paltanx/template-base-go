@@ -1,13 +1,15 @@
 package repositories
 
+// agregar en container y newcontainer referencia  nuevo repo y luego retornar
+
 type Container struct {
-	ExampleRepository IExampleRepository
+	OtpRepository IOtpRepository
 }
 
 func NewContainer(
-	exampleRepository IExampleRepository,
+	otpRepository IOtpRepository,
 ) *Container {
 	return &Container{
-		ExampleRepository: exampleRepository,
+		OtpRepository: otpRepository,
 	}
 }

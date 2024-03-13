@@ -1,4 +1,4 @@
-module template-base-go
+module get-otp-go
 
 go 1.22
 
