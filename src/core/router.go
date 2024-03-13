@@ -62,7 +62,6 @@ func (a *api) init(handlers *handlers.Container, logger *utils.Logger) {
 
 	subrouter.Use(LogRequest(logger))
 
-	
-	subrouter.Handle("/get/{id}", http.HandlerFunc(handlers.OtpHandler.Get)).Methods(http.MethodGet)
+	subrouter.Handle("/post", http.HandlerFunc(handlers.OtpHandler.Post)).Methods(http.MethodPost)
 	a.router = router
 }

@@ -5,44 +5,29 @@ import (
 	"get-otp-go/src/models"
 	"log"
 
-	"github.com/go-playground/validator"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
-
-const collection_name = "otps"
-
-var validate *validator.Validate
-
-
 
 type OtpRepository struct {
 	Database *mongo.Database
 }
 
-
-
 type IOtpRepository interface {
-	Get(id string) (*models.Otp, error)
+	Post(otp *models.Otp) (*models.Otp, error)
 }
 
 func NewOtpRepository(db *mongo.Database) IOtpRepository {
-	validate = validator.New()
 	return &OtpRepository{Database: db}
 }
 
-func (br *OtpRepository) Get(id string) (*models.Otp, error) {
-	log.Println(id)
-	collection := br.Database.Collection(collection_name)
-	var otp models.Otp
-	
-	objID, err := primitive.ObjectIDFromHex(id)
+func (br *OtpRepository) Post(otp *models.Otp) (*models.Otp, error) {
+	collection := br.Database.Collection("otps")
+	_, err := collection.InsertOne(context.TODO(), otp)
 	if err != nil {
+		// Log the error and return
+		log.Printf("Error while inserting OTP: %v", err)
 		return nil, err
 	}
-
-	filter := bson.M{"_id": objID}
-	err = collection.FindOne(context.Background(), filter).Decode(&otp)
-	return &otp, err
+	// Return the inserted document and nil for the error
+	return otp, nil
 }
